@@ -6,10 +6,11 @@ workflows:
     scripts:
       - name: Setup and Build APK
         script: |
-          unzip -o story-to-video-ai.zip
+          mkdir -p www
+          unzip -o story-to-video-ai.zip -d www
           npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init "Story To Video" "com.storytovideo.ai" --web-dir .
+          npx cap init "Story To Video" "com.storytovideo.ai" --web-dir www
           npx cap add android
           npx cap sync android
           cd android
@@ -17,6 +18,7 @@ workflows:
           ./gradlew assembleDebug
     artifacts:
       - android/app/build/outputs/apk/debug/*.apk
+
 
 
 
