@@ -6,8 +6,10 @@ workflows:
     scripts:
       - name: Setup and Build APK
         script: |
-          mkdir -p www
-          unzip -o story-to-video-ai.zip -d www
+          mkdir -p temp_zip www
+          unzip -o story-to-video-ai.zip -d temp_zip
+          INDEX_DIR=$(find temp_zip -name "index.html" -exec dirname {} \; | head -n 1)
+          cp -r "$INDEX_DIR"/* www/
           npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
           npx cap init "Story To Video" "com.storytovideo.ai" --web-dir www
@@ -18,6 +20,7 @@ workflows:
           ./gradlew assembleDebug
     artifacts:
       - android/app/build/outputs/apk/debug/*.apk
+
 
 
 
