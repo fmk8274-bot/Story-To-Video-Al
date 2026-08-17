@@ -4,19 +4,20 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 60
     scripts:
-      - name: Extract zip
+      - name: Setup and Build APK
         script: |
           unzip -o story-to-video-ai.zip
-      - name: Setup Capacitor and Build APK
-        script: |
+          npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
           npx cap init "Story To Video" "com.storytovideo.ai" --web-dir .
           npx cap add android
           npx cap sync android
           cd android
+          chmod +x gradlew
           ./gradlew assembleDebug
     artifacts:
       - android/app/build/outputs/apk/debug/*.apk
+
 
 
 
