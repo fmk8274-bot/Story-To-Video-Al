@@ -4,7 +4,7 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 60
     environment:
-      java: 21
+      java: 17
       node: 20
     scripts:
       - name: Setup and Build APK
@@ -14,15 +14,18 @@ workflows:
           INDEX_DIR=$(find temp_zip -name "index.html" -exec dirname {} \; | head -n 1)
           cp -r "$INDEX_DIR"/* www/
           npm init -y
-          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
           npx cap init "Story To Video" "com.storytovideo.ai" --web-dir www
           npx cap add android
           npx cap sync android
           cd android
+          echo "android.enableJetifier=true" >> gradle.properties
+          echo "android.useAndroidX=true" >> gradle.properties
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug -x lint --warning-mode none
     artifacts:
       - android/app/build/outputs/apk/debug/*.apk
+
 
 
 
